@@ -1,3 +1,4 @@
+using System.Text;
 using System.IO.Pipes;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Mime;
@@ -24,7 +25,11 @@ using Microsoft.EntityFrameworkCore.Design;
 using API.Data;
 using API.Data.Migrations;
 using API.Entities;
-
+using API.Interfaces;
+using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using API.Extensions;
 
 namespace API
 {
@@ -39,10 +44,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options =>
-            {
-                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-            });
+            
+            services.AddApplicationServices(_config);
+            services.AddIdentityServices(_config);
             services.AddControllers();
             
             
@@ -57,6 +61,8 @@ namespace API
                             .AllowCredentials();
                     });
             });
+
+           
 
 
             services.AddSwaggerGen(c =>
@@ -80,6 +86,8 @@ namespace API
             app.UseRouting();
             
             app.UseCors();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
