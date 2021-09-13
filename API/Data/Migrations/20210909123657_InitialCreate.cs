@@ -4,7 +4,7 @@
 // dotnet ef migrations add InitialCreate --context  DataContext
 // mappen kommer bare i API mappen, men den kan bare flyttes manuelt 
 
-namespace API.Migrations
+namespace API.Data.Migrations
 {
     public partial class InitialCreate : Migration
     {
